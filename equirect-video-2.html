@@ -375,7 +375,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           equirectlayer.lowerVerticalAngle = -Math.PI / 2.0;
         }
         equirectlayer.radius = document.getElementById("radius_txt").value;*/
-
         if (backdrop.checked) {
           backgroundTexture = loadTexture(gl, 'media/textures/mono_equirect_test.png', (w, h) => {
             equirectlayerbackdrop = xrGLFactory.createEquirectLayer("texture", {
@@ -392,7 +391,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             session.updateRenderState({ layers: [equirectlayerbackdrop, equirectlayer, proj_layer] });
           });
         }
-        session.updateRenderState({ layers: [equirectlayer, proj_layer] });
+
+        // eslint-disable-next-line no-undef
+        var baseLayer = new XRWebGLLayer(session, gl, {antialias: true});
+
+        session.updateRenderState({baseLayer: baseLayer, layers: [equirectlayer, proj_layer]});
+        // session.updateRenderState({ layers: [equirectlayer, proj_layer] });
         // Inform the session that we're ready to begin drawing.
         session.requestAnimationFrame(onXRFrame);
       });
